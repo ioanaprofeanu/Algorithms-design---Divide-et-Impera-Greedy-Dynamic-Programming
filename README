@@ -1,0 +1,99 @@
+# Profeanu Ioana, 323CA
+# README file
+-------------------------------------------------------------------------------
+* Problem 1: Gigel si Tabelele Walsh
+  ~ Method used: Divide et Impera
+  ~ Implementation: By the way the matrix is composed, it is obvious that we
+  can divide the matrix in 4 submatrices, so we divide the initial problem
+  in four smaller problems, until reaching the result;
+    - in a recursive function which returns a boolean (true for 1, false for 0)
+    we call the function with changed x and y indices, depending on the part of
+    the matrix the searched element is on (we decide by comparing the indices
+    with the middle); if we are on the forth part of the matrix (bottom right),
+    we negate the result; the initial case is when the coordinates are (1, 1)
+    and the value of the element is false;
+  ~ Time complexity for solving the problem: O(K * log(N)); for each of the k
+  pairs, it takes a time of O(log(n)) to find the result due to the recursive
+  function;
+  ~ Additional space complexity for solving the problem: O(log(N)), because of
+  the storage occupied by the results on the stack during recursion;
+-------------------------------------------------------------------------------
+* Problem 2: Gigel si cuvintele criptate
+  ~ Method used: Greedy
+  ~ Implementation: the main idea is to calculate "majority index" (explained
+  below) for each letter within all the strings, then for each letter to see
+  how many strings we can concatenate until the total majority index (the sum
+  of the so-far concatenated strings) reaches 0; the result will be the maximum
+  number of concatenated words found;
+    - calculate the number of occurrences of each letter of the alphabet within
+    a given string; we keep an arraylist of arraylists, where each element i of
+    the main arraylist represents a frequency arraylist of the occurrence of
+    each letter of the alphabet within the i-th string;
+    - for each letter, calculate its local "majority index" within each string;
+    from the given formula for a majority letter (noOccurrence > totalLength
+    / 2), we call a majority index the result of: 2 * noOccurrence- totalLength;
+    store the majority indexes of the current letter calculated for each string
+    in an arraylist, which we sort in descending order and add its elements to
+    a sum, which we call the total majority index; then, one by one we add the
+    values in the arraylist of majority indexes, keeping the number of elements
+    added (which will represent the number of concatenated words), and when
+    reaching 0 or lower, we check if the number of concatenated words is
+    greater than the other results we found for the other letters; if so,
+    we change the overall result;
+    ~ Time complexity for solving the problem: O(26 * N * log(N)) =  O(N *
+    log(N)), for sorting and iterating;
+    ~ Additional space complexity for solving the problem: O(26 * N) = O(N),
+    due to the list of lists used;
+-------------------------------------------------------------------------------
+* Problem 3: Gigel si Prinel
+  ~ Method used: Dynamic Programming
+  ~ Implementation:
+    - using dynamic programming, get the operations that need to be done for
+    all the possible numbers in the target array (from 1 to 10^5); the base
+    case is allNumbersOperationList[1] = 0, and for the rest of the numbers,
+    allNumbersOperationList[i  + divisor_i] = min(allNumbersOperationList[i 
+    + 1], allNumbersOperationList[i] + 1); the allNumbersOperationList array
+    initially has all elements inf, and for each current number i, we get its
+    divisors and change their value to the number of operations done until
+    reaching i + 1;
+    - when reading the elements in the target array, replace them with the
+    number of operations to-be-made until reaching them; firstly, check if the
+    total number of operations is lower than k, return the sum of total number
+    of points; otherwise, using dynamic programming and using the dp array,
+    solve the knapsack problem: the weigh is k, the price array is p and the
+    object weight array is targetNoOperations;
+  ~ Time complexity for solving the problem: O(N * K), determined by the
+  knapsack-like dynamic programming method;
+  ~ Additional space complexity for solving the problem: O(K), determined by
+  the dp array;
+-------------------------------------------------------------------------------
+* Problem 4: Gigel si cheia de la portofel
+  ~ Method used: Dynamic Programming
+  ~ Implementation: the main idea is similar to the one used for getting the
+  number of occurrences of a substring within a string, but generalised to the
+  case when there are unknown characters in the initial string;
+    - using a dp matrix of size n x l, we initialise its first line with zeros,
+    and its first column like so: keep a counter of total question marks en-
+    countered, and the current dp[i][0] value will be the number of distinct
+    characters within the substring at the power the number of question marks
+    encountered; it makes sense for the first  "?", we can replace it with a
+    total number of letters as the total number of distinct letters possible,
+    and as we progress, the number used is multiplied with itself by the number
+    of unknown letters encountered;
+    - the previous step will help the dynamic programming algorithm and is key
+    in its solving; next, for each letter in the main string, iterate through
+    each letter of the substring; we have the following cases:
+      - if the current string character is known (is not "?"):
+        - is the current character in the string is equal with the one in the
+        substring: dp[i][j] = dp[i - 1][j] + (dp[i - 1][j - 1];
+        - if not equal: dp[i][j] = dp[i - 1][j];
+      - if the current string character is unknown:
+        - dp[i][j] = dp[i - 1][j] * distinctStringChars + dp[i - 1][j - 1] -
+        basically, same as in the case of equality, but we multiply the element
+        above in the dp matrix by the number of distinct characters (basically,
+        the number of values the characters can have);
+  ~ Time complexity for solving the problem: O(N * L), due to the dynamic pro-
+  gramming process;
+  ~ Additional space complexity for solving the problem: O(N * L), due to the
+  dp matrix;
+-------------------------------------------------------------------------------
